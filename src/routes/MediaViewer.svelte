@@ -1,6 +1,8 @@
 <script lang="ts">
     let { src }  = $props();
 
+    import play from '../../static/play.svg'
+
     let time = $state(0);
     let duration = $state(0);
     let paused = $state(true);
@@ -16,36 +18,50 @@
 		return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
 	}
 
-    function getSliderPointerDownHandler(valueToUpdate) {
-        let sliderPointerDownHandler = (e) => {
-            const div = e.currentTarget;
-            
-            function seek(e) {
-                const { left, width } = div.getBoundingClientRect();
+    let currentTimeSliderHandler = (e) => {
+        const div = e.currentTarget;
+        
+        function seek(e) {
+            const { left, width } = div.getBoundingClientRect();
 
-                let p = (e.clientX - left) / width;
-                if (p < 0) {
-                    p = 0;
-                }
-                if (p > 1) {
-                    p = 1;
-                }
-
-                valueToUpdate = p * duration;
+            let p = (e.clientX - left) / width;
+            if (p < 0) {
+                p = 0;
+            }
+            if (p > 1) {
+                p = 1;
             }
 
-            seek(e);
+            const value = p * duration;
 
-            window.addEventListener('pointermove', seek);
-            window.addEventListener('pointerup', () => {
-                window.removeEventListener('pointermove', seek);
-            }, {
-                once: true
-            });
+            if (e.target.id === 'loopStart') {
+                loopStart = value;
+            } else if (e.target.id === 'loopEnd') {
+                loopEnd = value;
+            } else {
+                time = value;
+            }
         }
 
-        return sliderPointerDownHandler
-    }
+        seek(e);
+
+        window.addEventListener('pointermove', seek);
+        window.addEventListener('pointerup', () => {
+            window.removeEventListener('pointermove', seek);
+        }, {
+            once: true
+        });
+    };
+
+    let getLoopSliderHandler = (value) => {
+        let loopSliderHandler = (e) => {
+            const input = e.target;
+            value = (input.value - input.min) / (input.max - input.min) * 100;
+        };
+
+        return loopSliderHandler;
+    };
+
 </script>
 
 <div class={['player', { paused }]}>
@@ -97,7 +113,6 @@
                         } else {
                             time = value;
                         }
-                        
                     }
 
                     seek(e);
@@ -111,14 +126,20 @@
                 }}
             >
                 <div class="progress" style="--progress: {time / duration}%"></div>
-                <div id='loopStart' class="loopStart" style="--loop: {loopStart / duration}%"></div>
-                <div id='loopEnd' class="loopEnd" style="--loop: {loopEnd / duration}%"></div>
+
+                <input class="loop" type="range" min={0} max={duration} bind:value={loopStart} oninput={getLoopSliderHandler(loopStart)} /> 
+                <input class="loop" type="range" min={0} max={duration} bind:value={loopEnd} oninput={getLoopSliderHandler(loopEnd)} />
+
             </div>
         </div>
         <div>
             <span>{duration ? formatTime(duration) : '--:--'}</span>
         </div>
+        <p>end time: {loopEnd}</p>
     </div>
+
+    <input class="loop" type="range" min={0} max={duration} bind:value={loopStart} oninput={getLoopSliderHandler(loopStart)} /> 
+    <input class="loop" type="range" min={0} max={duration} bind:value={loopEnd} oninput={getLoopSliderHandler(loopEnd)} />
 </div>
 
 
@@ -181,7 +202,7 @@
 	.currentTimeSlider {
 		flex: 1;
 		height: 0.5em;
-		background: var(--bg-2);
+		background: grey;
 		border-radius: 0.5em;
 		overflow: hidden;
 	}
@@ -189,11 +210,6 @@
 	.progress {
 		width: calc(100 * var(--progress));
 		height: 100%;
-		background: var(--bg-3);
-	}
-
-    .loop {
-		left: calc(100 * var(--loop));
-		height: 100%;
+		background: blue;
 	}
 </style>
