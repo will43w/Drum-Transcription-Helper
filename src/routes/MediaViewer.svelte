@@ -1,13 +1,15 @@
 <script lang="ts">
     let { src }  = $props();
 
-    import play from '../../static/play.svg'
+    import RangeSlider from 'svelte-range-slider-pips'
 
     let time = $state(0);
     let duration = $state(0);
     let paused = $state(true);
-    let loopStart = $state(0);
-    let loopEnd = $state(0);
+    let timeValues = $state([0, 10, 20]);
+    let loopStart = $derived(timeValues[0]);
+    let loopEnd = $derived(timeValues[1]);
+    let time2 = $derived(timeValues[2])
 
     function formatTime(timeInSeconds: number) {
 		if (isNaN(timeInSeconds)) return '...';
@@ -125,10 +127,7 @@
                     });
                 }}
             >
-                <div class="progress" style="--progress: {time / duration}%"></div>
-
-                <input class="loop" type="range" min={0} max={duration} bind:value={loopStart} oninput={getLoopSliderHandler(loopStart)} /> 
-                <input class="loop" type="range" min={0} max={duration} bind:value={loopEnd} oninput={getLoopSliderHandler(loopEnd)} />
+            TODO SLIDER HERE
 
             </div>
         </div>
@@ -136,14 +135,40 @@
             <span>{duration ? formatTime(duration) : '--:--'}</span>
         </div>
         <p>end time: {loopEnd}</p>
-    </div>
 
-    <input class="loop" type="range" min={0} max={duration} bind:value={loopStart} oninput={getLoopSliderHandler(loopStart)} /> 
-    <input class="loop" type="range" min={0} max={duration} bind:value={loopEnd} oninput={getLoopSliderHandler(loopEnd)} />
+        <div class="slider-container">
+            <RangeSlider 
+                range 
+                pushy
+                min={0}
+                max={duration} 
+                values={[0, 10, 20]} />
+        </div>
+    </div>
 </div>
 
 
 <style>
+    .slider-container {
+        position: relative;
+        width: 100%;
+        padding: 0px 0;
+    }
+
+    /* Make progress indicator thumb look different */
+    .slider-container :global(.range-slider__thumb:nth-child(3)) {
+        background-color: #2196f3;
+        width: 2px;
+        height: 20px;
+    }
+
+    /* Optional: adjust other thumbs */
+    .slider-container :global(.range-slider__thumb):not(:nth-child(3)) {
+        background-color: black;
+        width: 2px;
+        height: 20px;
+    }
+
 	.player {
 		display: grid;
 		grid-template-columns: 2.5em 1fr;
@@ -212,4 +237,19 @@
 		height: 100%;
 		background: blue;
 	}
+
+    .progress-indicator {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: calc(100 * var(--progress));
+        width: 2px;
+        background: #0f1114;
+        z-index: 2;
+    }
+
 </style>
+
+
+
+
