@@ -1,23 +1,20 @@
 <script>
-	import MediaViewer from "./MediaViewer.svelte";
-	import Slider from "./Slider.svelte";
+	import AudioPlayer from "./AudioPlayer.svelte";
+	import ProgressBar from "./ProgressBar.svelte";
 
+	let time = $state(0);
+	let duration = $state(0);
+	let paused = $state(true);
+	let loopStart = $state(0);
+	let loopEnd = $state(10);
 </script>
 <h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
-<div class="centered">
-    <MediaViewer src={'https://sveltejs.github.io/assets/music/strauss.mp3'} />
-</div>
-<div>
-    <Slider />
-</div>
 
-<video 
-	src={"https://www.instagram.com/reel/DIP-LzoyFTp/?igsh=Nmxnd3ptbmQ5Mjhl"}
-></video>
-<video 
-	src={"https://www.youtube.com/watch?v=UzLg6aM3c7U"}
-></video>
+<AudioPlayer
+	src={'https://sveltejs.github.io/assets/music/satie.mp3'}
+	loopStart={10}
+	loopEnd={15}
+></AudioPlayer>
 
 <style>
 	.centered {
