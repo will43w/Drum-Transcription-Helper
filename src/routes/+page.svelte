@@ -12,6 +12,13 @@
     <Slider />
 </div>
 
+<video 
+	src={"https://www.instagram.com/reel/DIP-LzoyFTp/?igsh=Nmxnd3ptbmQ5Mjhl"}
+></video>
+<video 
+	src={"https://www.youtube.com/watch?v=UzLg6aM3c7U"}
+></video>
+
 <style>
 	.centered {
 		display: flex;
