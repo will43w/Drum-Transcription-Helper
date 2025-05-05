@@ -3,8 +3,7 @@
         time=$bindable(0),
         paused=$bindable(true),
         duration,
-        loopStart,
-        loopEnd
+        checkpoint
     } = $props();
 
 	function format(time) {
@@ -56,8 +55,7 @@
 				}}
 			>
 				<div class="progress" style="--progress: {time / duration}%"></div>
-                <div class="loop" style="--offset: {100 * loopStart / duration}%"></div>
-                <div class="loop" style="--offset: {100 * loopEnd / duration}%"></div>
+                <div class="marker" style="--offset: {100 * checkpoint / duration}%"></div>
 			</div>
 			<span>{duration ? format(duration) : '--:--'}</span>
 		</div>
@@ -131,7 +129,7 @@
         overflow: visible;
 	}
 
-    .loop {
+    .marker {
         position: absolute;
         top: 50%;
         transform: translate(-50%, -50%); /* center horizontally & vertically */

@@ -1,19 +1,18 @@
 <script>
 	import AudioPlayer from "./AudioPlayer.svelte";
-	import ProgressBar from "./ProgressBar.svelte";
+	import MediaInput from "./AudioInput.svelte";
+	import AudioInput from "./AudioInput.svelte";
 
-	let time = $state(0);
-	let duration = $state(0);
-	let paused = $state(true);
-	let loopStart = $state(0);
-	let loopEnd = $state(10);
+	let src = $state("");
 </script>
 <h1>Welcome to SvelteKit</h1>
 
+<AudioInput 
+	bind:src={src}
+></AudioInput>
+
 <AudioPlayer
-	src={'https://sveltejs.github.io/assets/music/satie.mp3'}
-	loopStart={10}
-	loopEnd={15}
+	{src}
 ></AudioPlayer>
 
 <style>

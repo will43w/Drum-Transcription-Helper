@@ -2,40 +2,53 @@
     import ProgressBar from "./ProgressBar.svelte";
 
     let {
-        src,
-        loopStart,
-        loopEnd
+        src
     } = $props();
 
     let time = $state(0);
+    let checkpoint = $state(0);
     let duration = $state(0);
     let paused = $state(true);
 
-    $effect(() => {
-        const id = setInterval(() => {
-            if (time > loopEnd) {
-                time = loopStart;
-            }
-        }, 3)
+    function onkeydown(e) {
+        switch (e.key) {
+            case 'ArrowRight':
+                time += 0.2;
+                break;
 
-        return () => {
-            clearInterval(id);
+            case 'ArrowLeft':
+                time -= 0.2;
+                break;
+
+            case ' ':
+                paused = !$state.snapshot(paused);
+                break;
+
+            case 'r':
+                time = $state.snapshot(checkpoint);
+                break;
+
+            case 's':
+                checkpoint = $state.snapshot(time);
+                break;
         }
-    });
+    };
 </script>
 
-<audio
-	{src}
-	bind:currentTime={time}
-	bind:duration
-	bind:paused
-></audio>
+<svelte:window {onkeydown} />
 
-<ProgressBar
-    bind:time
-    bind:paused
-    {duration}
-    {loopStart}
-    {loopEnd}
->
-</ProgressBar>
+<div >
+    <audio
+        {src}
+        bind:currentTime={time}
+        bind:duration
+        bind:paused
+    ></audio>
+
+    <ProgressBar
+        bind:time
+        bind:paused
+        {duration}
+        {checkpoint}
+    ></ProgressBar>
+</div>
