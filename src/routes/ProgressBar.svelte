@@ -121,7 +121,7 @@
 	.progress {
 		width: calc(100 * var(--progress));
 		height: 100%;
-		background: mediumslateblue;
+		background: #7b68ee;
         border-radius: 0.5em;
         flex: 1;
         position: absolute;

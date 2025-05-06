@@ -1,28 +1,32 @@
 <script>
-	import AudioPlayer from "./AudioPlayer.svelte";
-	import MediaInput from "./AudioInput.svelte";
-	import AudioInput from "./AudioInput.svelte";
+	import WaveformPlayer from "./WaveformPlayer.svelte";
 
 	let src = $state("");
 </script>
-<h1>Welcome to SvelteKit</h1>
 
-<AudioInput 
-	bind:src={src}
-></AudioInput>
+<div class="centered">
+	<h1 class="header">
+		Transcription Helper
+	</h1>
 
-<AudioPlayer
-	{src}
-></AudioPlayer>
+	<WaveformPlayer>
+	
+	</WaveformPlayer>
+</div>
 
 <style>
+	.header {
+		font-family: system-ui;
+	}
+
 	.centered {
 		display: flex;
 		flex-direction: column;
 		height: 100%;
+		width: 80%;
 		justify-content: center;
 		gap: 0.5em;
-		max-width: 40em;
 		margin: 0 auto;
+		font-family: system-ui;
 	}
 </style>
